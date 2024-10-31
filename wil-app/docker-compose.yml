@@ -1,0 +1,35 @@
+# version: '3'
+
+############ IoT Platform ####################
+#        Influxdb, NodeRed, Grafana          #
+##############################################
+
+services:
+
+  nodered:
+    #image: nodered/node-red:4.0.5-22
+    build: .
+    image: custom-node-red:4.0.5
+    container_name: nodered
+    restart: unless-stopped # always  # Added restart policy
+    volumes:
+     - ./node_data:/data
+    ports:
+      - "1880:1880"
+
+  influxdb:
+    image: influxdb:2.7.10
+    container_name: influxdb
+    restart: unless-stopped # always  # Added restart policy
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${DOCKER_INFLUXDB_INIT_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+      - TZ=Europe/Paris
+    volumes:
+      - ./influx_data:/var/lib/influxdb2:rw
+    ports:
+      - "8086:8086"

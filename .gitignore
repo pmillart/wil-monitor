@@ -1,0 +1,12 @@
+# Block .env files and other sensitive files
+.env
+.env.local
+.env.*.local
+
+# Block sensitive files
+composer.lock
+package-lock.json
+
+# Block sensitive directories
+/node_modules
+/node_data
